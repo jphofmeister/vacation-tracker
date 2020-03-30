@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vacation Tracker</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <p>This is the index page</p>
+  <p>Dates</p>
+  <div id="datesList"></div>
+  <form id="date_form">
+    <label for="date">Add Vacation Date</label>
+    <input type="date" name="date" id="date">
+    <button id="submit">+ Add</button>
+  </form>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      // get dates
+      const getDates = () => {
+        $.ajax({
+          url: "/api/day",
+          success: (result, status, xhr) => {
+            const ul = $("<ul>");
+            for (let i = 0; i < result.length; i++) {
+              let li = $("<li>");
+              li.append(result[i].date);
+              li.append('<button class="delete" data-id="' + result[i]._id + '"> <i class="fas fa-times"></i></button>');
+              // li.append('<button class="delete" data-id="' + result[i]._id + '"> X' + result[i]._id + '</button>');
+              li.append('</li>')
+              ul.append(li);
+            }
+            ul.append("</ul>");
+            $("#datesList").html(ul);
+          }
+        });
+      }
+
+      // post date
+      $("#submit").click((e) => {
+        e.preventDefault();
+        $.ajax({
+          type: "POST",
+          url: "/api/day",
+          data: $("#date_form").serialize(),
+          success: (data) => {
+            alert(data);
+          }
+        });
+      });
+
+      // delete date
+      $(document).on('click', '.delete', function (e) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        const deleteId = $(this).attr('data-id');
+        // console.log(deleteId);
+        $.ajax({
+          type: "DELETE",
+          url: "/api/day/" + deleteId,
+          success: () => {
+            getDates();
+          }
+        })
+      });
+
+      getDates();
+
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "vacation-tracker",
+  "version": "1.0.0",
+  "description": "a simple app to track my vacation time so I don't have to deal with Excel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Joseph Hofmeister",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.12",
+    "nodemon": "^2.0.2",
+    "path": "^0.12.7"
+  }
+}
